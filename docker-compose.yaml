@@ -1,0 +1,46 @@
+version: '3.6'
+services:
+  ds:
+    container_name: ds
+    build: ./../discovery-service
+    ports:
+      - 8761:8761  
+  cf:
+    container_name: cf
+    build: ./../config-service
+    ports:
+      - 8888:8888
+    environment: 
+      - WAIT_HOSTS=ds:8761
+    depends_on: 
+      - ds
+  us:
+    container_name: us
+    build: ./../user-service
+    ports:
+      - 8081:8081
+    environment: 
+      - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/users
+      - WAIT_HOSTS=ds:8761,cf:8888
+    depends_on:
+      - cf
+      - ds 
+  cs:
+    container_name: cs
+    build: ./../category-service
+    ports:
+      - 8082:8082
+    environment: 
+      - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/categories
+      - WAIT_HOSTS=ds:8761,cf:8888
+    depends_on:
+      - cf
+      - ds
+  gw:
+    container_name: gw
+    build: ./../gateway-service
+    ports:
+      - 80:80
+    environment:
+      - WAIT_HOSTS=ds:8761,cf:8888  
+
