@@ -36,6 +36,17 @@ services:
     depends_on:
       - cf
       - ds
+  inc:
+    container_name: inc
+    build: ./../income-service
+    ports:
+      - 8083:8083
+    environment: 
+      - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/incomes
+      - WAIT_HOSTS=ds:8761,cf:8888
+    depends_on:
+      - cf
+      - ds
   gw:
     container_name: gw
     build: ./../gateway-service
