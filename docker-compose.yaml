@@ -1,13 +1,15 @@
-version: '3.6'
+version: '3.8'
 services:
   ds:
     container_name: ds
     build: ./../discovery-service
+    image: finances_ds
     ports:
       - 8761:8761  
   cf:
     container_name: cf
     build: ./../config-service
+    image: finances_cf
     ports:
       - 8888:8888
     environment: 
@@ -17,6 +19,7 @@ services:
   us:
     container_name: us
     build: ./../user-service
+    image: finances_us
     ports:
       - 8081:8081
     environment: 
@@ -28,6 +31,7 @@ services:
   cs:
     container_name: cs
     build: ./../category-service
+    image: finances_cs
     ports:
       - 8082:8082
     environment: 
@@ -39,10 +43,35 @@ services:
   inc:
     container_name: inc
     build: ./../income-service
+    image: finances_inc
     ports:
       - 8083:8083
     environment: 
       - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/incomes
+      - WAIT_HOSTS=ds:8761,cf:8888
+    depends_on:
+      - cf
+      - ds
+  exp:
+    container_name: exp
+    build: ./../expense-service
+    image: finances_exp
+    ports:
+      - 8084:8084
+    environment: 
+      - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/expenses
+      - WAIT_HOSTS=ds:8761,cf:8888
+    depends_on:
+      - cf
+      - ds
+  bud:
+    container_name: bud
+    build: ./../budget-service
+    image: finances_bud
+    ports:
+      - 8085:8085
+    environment: 
+      - MONGO_URI=mongodb+srv://finances:finances@cluster0.1n7zl.mongodb.net/budgets
       - WAIT_HOSTS=ds:8761,cf:8888
     depends_on:
       - cf
@@ -53,6 +82,7 @@ services:
     ports:
       - 80:80
     environment:
-      - WAIT_HOSTS_TIMEOUT=180
-      - WAIT_HOSTS=ds:8761,cf:8888,us:8081,cs:8082  
-
+      - WAIT_HOSTS=ds:8761,cf:8888
+networks: 
+  default:
+    name: finances
