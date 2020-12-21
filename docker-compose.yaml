@@ -14,27 +14,28 @@ services:
     container_name: ds
     build: ./../discovery-service
     image: finances_ds
-    ports:
-      - 8761:8761
-    environment: 
-      - SERVER_SSL_ENABLED=true
-      - SERVER_SSL_KEY_STORE=/app/keystore.p12
-      - SERVER_SSL_KEY_STORE_PASSWORD=spfc2408
-      - SERVER_SSL_KEY_ALIAS=finances
-      - SERVER_SSL_KEY_STORE_TYPE=PKCS12
+    expose:
+      - 8761
   gw:
     container_name: gw
     build: ./../gateway-service
     image: finances_gw
     expose:
-      - 80
+      - 443
     ports:
-      - 80:80
+      - 443:443
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS}
+      - EUREKA_SERVER=http://ds:8761/eureka
       - OKTA_OAUTH2_CLIENT_ID=${OKTA_ID}
       - OKTA_OAUTH2_CLIENT_SECRET=${OKTA_SECRET}
       - WAIT_HOSTS=ds:8761
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_KEY_STORE=/app/keystore.p12
+      - SERVER_SSL_KEY_STORE_PASSWORD=${CERT_PASSWORD}
+      - SERVER_SSL_KEY_ALIAS=finances
+      - SERVER_SSL_KEY_STORE_TYPE=PKCS12
+    depends_on: 
+      - ds
   us:
     container_name: us
     build: ./../user-service
@@ -42,7 +43,7 @@ services:
     expose:
       - 8081
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
+      - EUREKA_SERVER=http://ds:8761/eureka 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
@@ -54,10 +55,11 @@ services:
     expose:
       - 8082
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
+      - EUREKA_SERVER=http://ds:8761/eureka 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
+      - db
   inc:
     container_name: inc
     build: ./../income-service
@@ -65,10 +67,11 @@ services:
     expose:
       - 8083
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
+      - EUREKA_SERVER=http://ds:8761/eureka 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
+      - db
   exp:
     container_name: exp
     build: ./../expense-service
@@ -76,10 +79,11 @@ services:
     expose:
       - 8084
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
+      - EUREKA_SERVER=http://ds:8761/eureka 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
+      - db
   bud:
     container_name: bud
     build: ./../budget-service
@@ -87,10 +91,11 @@ services:
     expose:
       - 8085
     environment:
-      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
+      - EUREKA_SERVER=http://ds:8761/eureka 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
+      - db
 networks: 
   default:
     name: finances
