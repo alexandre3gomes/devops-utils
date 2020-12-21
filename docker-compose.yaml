@@ -25,6 +25,7 @@ services:
     ports:
       - 80:80
     environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS}
       - OKTA_OAUTH2_CLIENT_ID=${OKTA_ID}
       - OKTA_OAUTH2_CLIENT_SECRET=${OKTA_SECRET}
       - WAIT_HOSTS=ds:8761
@@ -34,7 +35,8 @@ services:
     image: finances_us
     expose:
       - 8081
-    environment: 
+    environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
@@ -45,7 +47,8 @@ services:
     image: finances_cs
     expose:
       - 8082
-    environment: 
+    environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
@@ -55,7 +58,8 @@ services:
     image: finances_inc
     expose:
       - 8083
-    environment: 
+    environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
@@ -65,7 +69,8 @@ services:
     image: finances_exp
     expose:
       - 8084
-    environment: 
+    environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
@@ -75,7 +80,8 @@ services:
     image: finances_bud
     expose:
       - 8085
-    environment: 
+    environment:
+      - EUREKA_SERVER=${EUREKA_DOCKER_ADDRESS} 
       - WAIT_HOSTS=ds:8761,mongodb:27017
     depends_on:
       - ds
