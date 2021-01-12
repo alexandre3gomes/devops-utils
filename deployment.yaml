@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    checksum/config: e34d3719cb530dc66aa86e7c4e1368bd5234e432b0aa1147b9b459a9be1897bc
+    deployment.kubernetes.io/revision: "2"
+    meta.helm.sh/release-name: finances-easy-api
+    meta.helm.sh/release-namespace: finances
+  generation: 2
+  labels:
+    app.kubernetes.io/instance: finances-easy-api
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ed-deployment
+    helm.sh/chart: ed-deployment-0.1.0
+  managedFields:
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    manager: Go-http-client
+    operation: Update
+    time: "2021-01-12T17:01:57Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    manager: kube-controller-manager
+    operation: Update
+    time: "2021-01-12T17:02:02Z"
+  name: finances-easy-api-ed-deployment
+  namespace: finances
+  resourceVersion: "28007914"
+  uid: a36b4842-f08d-4302-82fc-56527a92f349
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: finances-easy-api
+      app.kubernetes.io/name: ed-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: finances-easy-api
+        app.kubernetes.io/name: ed-deployment
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: finances-easy-api-ed-deployment-env
+        image: rg.fr-par.scw.cloud/alexandre3gomes/finances-easy:latest
+        imagePullPolicy: Always
+        name: app
+        ports:
+        - containerPort: 8089
+          name: port8089
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: finances-easy-api
+    meta.helm.sh/release-namespace: finances
+  creationTimestamp: "2021-01-12T17:01:57Z"
+  labels:
+    app.kubernetes.io/instance: finances-easy-api
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ed-deployment
+    helm.sh/chart: ed-deployment-0.1.0
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    manager: Go-http-client
+    operation: Update
+    time: "2021-01-12T17:01:57Z"
+  name: finances-easy-api-ed-deployment
+  namespace: finances
+  resourceVersion: "28007490"
+  uid: da5e2571-e5d4-4cd0-ab1f-20aed2800771
+spec:
+  clusterIP: 10.39.21.211
+  clusterIPs:
+  - 10.39.21.211
+  ports:
+  - name: port8089
+    port: 8089
+    protocol: TCP
+    targetPort: 8089
+  selector:
+    app.kubernetes.io/instance: finances-easy-api
+    app.kubernetes.io/name: ed-deployment
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
