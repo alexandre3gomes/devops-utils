@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+  POSTGRES_PASSWORD: ZDRmMThkNmQxYWFhYjBlNDEwZmMxZTcyMTZlYTQzOTg0MDEwZjM5ZDg3MDUwY2Y0MDcyOThjNzE2ZjQ3N2Q2OA==
+  POSTGRES_URL: amRiYzpwb3N0Z3Jlc3FsOi8vZWMyLTE3Ni0zNC0xODQtMTc0LmV1LXdlc3QtMS5jb21wdXRlLmFtYXpvbmF3cy5jb206NTQzMi9kNDBlM2RrNXIwZzFobw==
+  POSTGRES_USER: aHRmbG96c3JncWt0ZGc=
+kind: Secret
+metadata:
+  creationTimestamp: "2021-01-13T17:47:18Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:POSTGRES_PASSWORD: {}
+        f:POSTGRES_URL: {}
+        f:POSTGRES_USER: {}
+      f:type: {}
+    manager: kubectl-create
+    operation: Update
+    time: "2021-01-13T17:47:18Z"
+  name: finances-easy-api
+  namespace: finances
+  resourceVersion: "39136"
+  selfLink: /api/v1/namespaces/finances/secrets/finances-easy-api
+  uid: 99823f77-1666-4e67-8b3c-8bf0e1ba4f3a
+type: Opaque
