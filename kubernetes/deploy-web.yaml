@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finances-easy-web
+  namespace: finances
+  labels:
+    app: finances-easy-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finances-easy-web
+  template:
+    metadata:
+      labels:
+        app: finances-easy-web
+    spec:
+      containers:
+      - name: finances-easy-web
+        image: alexandre3gomes/finances-easy-web:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finances-easy-web-svc
+  namespace: finances
+spec:
+  type: ClusterIP
+  selector:
+    app: finances-easy-web
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80

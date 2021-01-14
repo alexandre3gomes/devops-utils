@@ -20,7 +20,7 @@ spec:
         - secretRef:
             name: finances-easy-api-secret
         name: finances-easy-api
-        image: rg.fr-par.scw.cloud/alexandre3gomes/finances-easy:latest
+        image: alexandre3gomes/finances-easy-api:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8089

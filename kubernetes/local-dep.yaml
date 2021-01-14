@@ -1,0 +1,56 @@
+apiVersion: v1
+data:
+  POSTGRES_PASSWORD: MTIzNDU2
+  POSTGRES_URL: amRiYzpwb3N0Z3Jlc3FsOi8vcG9zdGdyZXM6NTQzMi9maW5hbmNlcw==
+  POSTGRES_USER: cG9zdGdyZXM=
+kind: Secret
+type: Opaque
+metadata:
+  annotations:
+    app: finances-easy-api
+  name: finances-easy-api-secret
+  namespace: finances
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: finances-easy-api
+  name: local-api-svc
+  namespace: finances
+spec:
+  ports:
+  - nodePort: 32651
+    port: 8089
+    protocol: TCP
+    targetPort: 8089
+  selector:
+    app: finances-easy-api
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: finances-easy-web
+  name: local-web-svc
+  namespace: finances
+spec:
+  ports:
+  - nodePort: 32652
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: finances-easy-web
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost

@@ -11,6 +11,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: finances-easy-api-ed-deployment
+            name: finances-easy-api-svc
             port:
               number: 8089
