@@ -79,6 +79,20 @@ kind: Service
 metadata:
   name: postgres
   namespace: finances
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-ext
+  namespace: finances
   labels:
     app: postgres
 spec:

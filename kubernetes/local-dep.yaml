@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   POSTGRES_PASSWORD: MTIzNDU2
-  POSTGRES_URL: amRiYzpwb3N0Z3Jlc3FsOi8vcG9zdGdyZXM6NTQzMi9maW5hbmNlcw==
+  POSTGRES_URL: amRiYzpwb3N0Z3Jlc3FsOi8vcG9zdGdyZXMuZmluYW5jZXMuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9maW5hbmNlcw==
   POSTGRES_USER: cG9zdGdyZXM=
 kind: Secret
 type: Opaque
@@ -11,46 +11,38 @@ metadata:
   name: finances-easy-api-secret
   namespace: finances
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  labels:
-    app: finances-easy-api
-  name: local-api-svc
-  namespace: finances
+  name: finances-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-  ports:
-  - nodePort: 32651
-    port: 8089
-    protocol: TCP
-    targetPort: 8089
-  selector:
-    app: finances-easy-api
-  sessionAffinity: None
-  type: NodePort
-status:
-  loadBalancer:
-    ingress:
-    - hostname: localhost
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: finances-easy-api-svc
+            port:
+              number: 8089
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  labels:
-    app: finances-easy-web
-  name: local-web-svc
-  namespace: finances
+  name: finances-web-ingress
 spec:
-  ports:
-  - nodePort: 32652
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    app: finances-easy-web
-  sessionAffinity: None
-  type: NodePort
-status:
-  loadBalancer:
-    ingress:
-    - hostname: localhost
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: finances-easy-web-svc
+            port:
+              number: 80
