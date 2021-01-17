@@ -35,20 +35,3 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: finances-web-ingress
-spec:
-  rules:
-  - host: 47a43729-0b35-4e05-9b55-b2e57dc9c22a.nodes.k8s.fr-par.scw.cloud
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: finances-easy-web-svc
-            port:
-              number: 80

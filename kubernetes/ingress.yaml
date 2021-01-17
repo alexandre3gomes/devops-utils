@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: finances-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: 47a43729-0b35-4e05-9b55-b2e57dc9c22a.nodes.k8s.fr-par.scw.cloud
+    http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: finances-easy-api-svc
+            port:
+              number: 8089
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: finances-web-ingress
+spec:
+  rules:
+  - host: 47a43729-0b35-4e05-9b55-b2e57dc9c22a.nodes.k8s.fr-par.scw.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: finances-easy-web-svc
+            port:
+              number: 80
