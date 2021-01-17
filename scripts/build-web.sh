@@ -1,2 +1,4 @@
 #!/bin/sh
-docker build -t alexandre3gomes/finances-easy-api:dev ~/desenv/projects/personal/finances-easy/finances-easy-web/
+cd ~/desenv/projects/personal/finances-easy/finances-easy-web
+ng build --prod
+docker build -t alexandre3gomes/finances-easy-web:dev .
