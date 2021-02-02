@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: finances-easy-callback-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: finances-easy.com
+    http:
+      paths:
+      - path: "/callback(/|$)(.*)"
+        pathType: Prefix
+        backend:
+          service:
+            name: finances-easy-web-svc
+            port:
+              number: 80

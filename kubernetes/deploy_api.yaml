@@ -23,9 +23,11 @@ spec:
       - envFrom:
         - secretRef:
             name: finances-easy-api-secret
+        - secretRef:
+            name: finances-okta-secret
         name: finances-easy-api
         image: alexandre3gomes/finances-easy-api:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8089
 ---

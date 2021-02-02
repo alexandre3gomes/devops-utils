@@ -17,9 +17,15 @@ metadata:
   name: finances-easy-api-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+  - hosts:
+    - 10646724a8dc.ngrok.io
+    secretName: finances-easy-tls
   rules:
-  - host: localhost
+  - host: 10646724a8dc.ngrok.io
     http:
       paths:
       - path: /api(/|$)(.*)
@@ -34,9 +40,16 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: finances-easy-web-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+  - hosts:
+    - 10646724a8dc.ngrok.io
+    secretName: finances-easy-tls
   rules:
-  - host: localhost
+  - host: 10646724a8dc.ngrok.io
     http:
       paths:
       - path: /

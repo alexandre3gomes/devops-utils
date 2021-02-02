@@ -1,32 +1,31 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: finances-api-ingress
+  name: finances-easy-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:  
+    - hosts:
+      - api.finances-easy.com
+      - finances-easy.com
+      secretName: finances-tls
   rules:
-  - host: 47a43729-0b35-4e05-9b55-b2e57dc9c22a.nodes.k8s.fr-par.scw.cloud
+  - host: api.finances-easy.com
     http:
       paths:
-      - path: /api(/|$)(.*)
+      - path: "/"
         pathType: Prefix
         backend:
           service:
             name: finances-easy-api-svc
             port:
               number: 8089
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: finances-web-ingress
-spec:
-  rules:
-  - host: 47a43729-0b35-4e05-9b55-b2e57dc9c22a.nodes.k8s.fr-par.scw.cloud
+  - host: finances-easy.com
     http:
       paths:
-      - path: /
+      - path: "/"
         pathType: Prefix
         backend:
           service:
