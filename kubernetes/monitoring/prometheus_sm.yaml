@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: finances-service-monitor
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: finances-easy-api
+  endpoints:
+    - interval: 30s
+      path: /actuator/prometheus
+  namespaceSelector:
+    matchNames:
+    - finances

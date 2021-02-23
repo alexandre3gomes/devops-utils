@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubernetes.digitalocean.com/load-balancer-id: 1b642ee3-096f-4819-a5a9-8b4960b916ac
+    meta.helm.sh/release-name: ingress-nginx
+    meta.helm.sh/release-namespace: ingress-nginx
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: 0ffbb76f-f447-44a7-ad04-9e6071fb488c
+  creationTimestamp: "2021-02-20T10:19:42Z"
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/version: 0.43.0
+    helm.sh/chart: ingress-nginx-3.20.1
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/name: {}
+          f:app.kubernetes.io/version: {}
+          f:helm.sh/chart: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":80,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":443,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/name: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2021-02-20T10:19:42Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubernetes.digitalocean.com/load-balancer-id: {}
+          f:service.beta.kubernetes.io/do-loadbalancer-certificate-id: {}
+        f:finalizers:
+          .: {}
+          v:"service.kubernetes.io/load-balancer-cleanup": {}
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: digitalocean-cloud-controller-manager
+    operation: Update
+    time: "2021-02-21T22:22:40Z"
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+  resourceVersion: "5726713"
+  selfLink: /api/v1/namespaces/ingress-nginx/services/ingress-nginx-controller
+  uid: e7c6c90e-8742-4d05-9e74-ba76a8477ec2
+spec:
+  clusterIP: 10.245.162.161
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 32476
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    nodePort: 32436
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 157.245.28.148

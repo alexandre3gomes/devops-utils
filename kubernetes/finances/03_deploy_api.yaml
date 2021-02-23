@@ -36,6 +36,8 @@ kind: Service
 metadata:
   name: finances-easy-api-svc
   namespace: finances
+  labels:
+    app: finances-easy-api
 spec:
   type: ClusterIP
   selector:
