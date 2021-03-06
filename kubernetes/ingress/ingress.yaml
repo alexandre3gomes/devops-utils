@@ -2,15 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: finances-easy-ingress
+  namespace: finances
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  tls:  
-    - hosts:
-      - api.finances-easy.com
-      - finances-easy.com
-      secretName: finances-tls
   rules:
   - host: api.finances-easy.com
     http:

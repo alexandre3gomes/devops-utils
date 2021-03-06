@@ -27,7 +27,7 @@ spec:
             name: finances-okta-secret
         name: finances-easy-api
         image: alexandre3gomes/finances-easy-api:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8089
 ---

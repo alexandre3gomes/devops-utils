@@ -1,16 +1,14 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: finances-service-monitor
+  namespace: default
+  name: prometheus-self
   labels:
-    release: kube-prometheus-stack
+    app: prometheus
 spec:
+  endpoints:
+  - interval: 30s
+    port: web
   selector:
     matchLabels:
-      app: finances-easy-api
-  endpoints:
-    - interval: 30s
-      path: /actuator/prometheus
-  namespaceSelector:
-    matchNames:
-    - finances
+      app: prometheus
