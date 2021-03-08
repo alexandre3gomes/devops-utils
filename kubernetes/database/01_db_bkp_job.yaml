@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: finances
+  name: db-bkp
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: db-bkp
+            image: postgres:12-alpine
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - pg_dump --dbname postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@finances-db.capfvbhu8jfa.eu-west-1.rds.amazonaws.com:5432/finances -F t -f /tmp/bkp.tar.gz
+            volumeMounts:
+            - name: bkp-dir
+              mountPath: /tmp/
+            envFrom:
+            - secretRef:
+                name: finances-easy-api-secret
+          restartPolicy: OnFailure
+          volumes:
+          - name: bkp-dir
+            hostPath:
+              path: /tmp/
+              type: Directory

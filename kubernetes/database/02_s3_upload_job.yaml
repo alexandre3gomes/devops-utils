@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: finances
+  name: s3-upload
+spec:
+  schedule: "10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: aws-cli
+            image: amazon/aws-cli
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - aws s3api put-object --bucket finances-bkp --key dbbkp/bkp.tar.gz --body /tmp/bkp.tar.gz && rm /tmp/bkp.tar.gz
+            volumeMounts:
+            - name: bkp-dir
+              mountPath: /tmp/
+            - name: aws-config
+              mountPath: /root/.aws/
+          restartPolicy: OnFailure
+          volumes:
+          - name: bkp-dir
+            hostPath:
+              path: /tmp/
+              type: Directory
+          - name: aws-config
+            secret:
+              secretName: awsconfig

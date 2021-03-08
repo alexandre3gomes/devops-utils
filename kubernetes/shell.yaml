@@ -9,8 +9,13 @@ spec:
   containers:
   - name: nginx
     image: nginx
+    envFrom:
+    - secretRef:
+        name: finances-easy-api-secret
     volumeMounts:
     - name: shared-data
       mountPath: /usr/share/nginx/html
+  securityContext:
+    fsGroup: 1000
   hostNetwork: true
   dnsPolicy: Default
