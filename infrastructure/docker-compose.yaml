@@ -1,0 +1,26 @@
+version: '3'
+services:
+  api:
+    image: "alexandre3gomes/finances-easy-api"
+    pull_policy: always
+    container_name: api
+    env_file:
+      - finances.env
+  web:
+    image: "alexandre3gomes/finances-easy-web"
+    pull_policy: always
+    container_name: web
+    depends_on:
+      - api
+  gw:
+    image: "alexandre3gomes/haproxy"
+    pull_policy: always
+    container_name: haproxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/ssl/private:/etc/ssl/private
+    depends_on:
+      - api
+      - web
