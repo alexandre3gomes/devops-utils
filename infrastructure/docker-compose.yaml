@@ -20,7 +20,14 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /etc/ssl/private:/etc/ssl/private
+      - /etc/ssl/private:/etc/ssl/private:ro
     depends_on:
       - api
       - web
+  prometheus:
+    image: alexandre3gomes/prometheus
+    container_name: prometheus
+    volumes:
+      - prometheus_data:/prometheus
+volumes:
+  prometheus_data:

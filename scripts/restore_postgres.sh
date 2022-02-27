@@ -1,4 +1,2 @@
 #!/bin/sh
-kubectl exec -it $1 -- mkdir /var/lib/postgresql/backup
-kubectl cp ../data/latest.dump $1:/var/lib/postgresql/backup 
-kubectl exec -it $1 -- bash -c "pg_restore -U postgres -d finances -a -O -v /var/lib/postgresql/backup/latest.dump"
+pg_restore -h ec2-176-34-184-174.eu-west-1.compute.amazonaws.com -p 5432 -U htflozsrgqktdg -W -d d40e3dk5r0g1ho -a -F tar -O -v finances.dump
