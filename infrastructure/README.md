@@ -8,5 +8,6 @@ sudo certbot -d finances-easy.com --force-renew --manual --preferred-challenges 
 sudo certbot -d *.finances-easy.com --force-renew --manual --preferred-challenges dns certonly --server https://acme-v02.api.letsencrypt.org/directory
 
 Generate pem file to haproxy (check the x number in the output of certbot renewal)
-`cat /etc/letsencrypt/live/finances-easy.com-000x/fullchain.pem /etc/letsencrypt/live/finances-easy.com-000x/privkey.pem > /etc/ssl/private/finances-easy.com.pem`
+`cat /etc/letsencrypt/live/finances-easy.com-000x/fullchain.pem /etc/letsencrypt/live/finances-easy.com-000x/privkey.pem > /etc/ssl/private/root-finances-easy.com.pem`
+`cat /etc/letsencrypt/live/finances-easy.com-000x/fullchain.pem /etc/letsencrypt/live/finances-easy.com-000x/privkey.pem > /etc/ssl/private/sub-finances-easy.com.pem`
 
