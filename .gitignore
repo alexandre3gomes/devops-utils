@@ -77,4 +77,4 @@ override.tf.json
 terraform.rc
 
 # Dump files
-.dump
+*.dump
