@@ -1,5 +1,9 @@
 resource "aws_s3_bucket" "artificats" {
   bucket_prefix = "artificats"
+
+  provisioner "local-exec" {
+    command = "aws s3 cp ../../finances-easy-api/build/libs/finances-easy-api.jar s3://${self.bucket}"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "artifacts-public-policy" {
@@ -57,6 +61,12 @@ resource "aws_elastic_beanstalk_environment" "api-env" {
   }
 
   setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "SecurityGroups"
+    value     = aws_security_group.api-sg.name
+  }
+
+  setting {
     namespace = "aws:elasticbeanstalk:environment:process:default"
     name      = "HealthCheckPath"
     value     = "/actuator/health"
@@ -83,19 +93,19 @@ resource "aws_elastic_beanstalk_environment" "api-env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "POSTGRES_URL"
-    value     = "jdbc:postgresql://ec2-52-17-84-2.eu-west-1.compute.amazonaws.com:5432/d3tacm6kbj6q7j"
+    value     = "jdbc:postgresql://${aws_db_instance.finances-rds.endpoint}/${aws_db_instance.finances-rds.db_name}"
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "POSTGRES_USER"
-    value     = "chtzmvhzsimedm"
+    value     = aws_db_instance.finances-rds.username
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "POSTGRES_PASSWORD"
-    value     = "79dcdee0abb7ddb8c7855c334f6302a303958d09636e390a22e030e3b3a975b5"
+    value     = aws_db_instance.finances-rds.password
   }
 
   setting {
@@ -110,8 +120,10 @@ resource "aws_elastic_beanstalk_environment" "api-env" {
     name      = "HealthStreamingEnabled"
     value     = "true"
   }
+  provisioner "local-exec" {
+    command = "aws elasticbeanstalk update-environment --environment-name ${self.name} --version-label ${aws_elastic_beanstalk_application_version.api-source.name}"
+  }
 }
-
 resource "aws_apigatewayv2_api" "finances-api" {
   name          = "finances-api"
   protocol_type = "HTTP"

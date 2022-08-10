@@ -1,5 +1,10 @@
 resource "aws_s3_bucket" "app" {
   bucket_prefix = "finances-app"
+
+  provisioner "local-exec" {
+    command = "aws s3 sync ../../finances-easy-web/dist s3://${self.bucket}"
+  }
+
 }
 
 resource "aws_s3_bucket_public_access_block" "app-public-policy" {
@@ -69,7 +74,7 @@ resource "aws_cloudfront_distribution" "app-distribution" {
     cached_methods           = ["GET", "HEAD"]
     target_origin_id         = local.s3_origin_id
     cache_policy_id          = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-    origin_request_policy_id = "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf"
+    origin_request_policy_id = "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf" //Test other policies
     viewer_protocol_policy   = "redirect-to-https"
   }
 
