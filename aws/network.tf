@@ -44,19 +44,34 @@ resource "aws_acm_certificate" "api" {
 }
 
 resource "aws_route53_record" "app_validation" {
-  provider        = aws.us_east_1
+  provider = aws.us_east_1
+  for_each = {
+    for dvo in aws_acm_certificate.app.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
   allow_overwrite = true
-  name            = aws_acm_certificate.app.domain_validation_options.*.resource_record_name[0]
-  records         = [aws_acm_certificate.app.domain_validation_options.*.resource_record_value[0]]
+  name            = each.value["name"]
+  records         = [each.value["record"]]
   ttl             = 60
-  type            = aws_acm_certificate.app.domain_validation_options.*.resource_record_type[0]
+  type            = each.value["type"]
   zone_id         = aws_route53_zone.primary.zone_id
 }
+
 resource "aws_route53_record" "api_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.api.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
   allow_overwrite = true
-  name            = aws_acm_certificate.api.domain_validation_options.*.resource_record_name[0]
-  records         = [aws_acm_certificate.api.domain_validation_options.*.resource_record_value[0]]
+  name            = each.value["name"]
+  records         = [each.value["record"]]
   ttl             = 60
-  type            = aws_acm_certificate.api.domain_validation_options.*.resource_record_type[0]
+  type            = each.value["type"]
   zone_id         = aws_route53_zone.primary.zone_id
 }
