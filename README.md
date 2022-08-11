@@ -1,13 +1,9 @@
 # Finances Easy Devops
-This project contains utils files to build a kubernetes infrastructure and manifests of finances micro services, nginx ingress controller and prometheus monitoring
+This project contains scripts for different kind of deployments:
 
-## Terraform deployment ##
+###### [AWS Terraform](./aws) ######
+###### [Docker](./infrastructure) ######
+###### [kubernetes](./kubernetes) ######
 
-Deploy hosted zone:
-````
-terraform apply --target aws_route53_zone.primary -auto-approve
-````
-
-Restore dump file:
-
-pg_restore -h finances-db.ctr31f82yt32.eu-west-1.rds.amazonaws.com -d finances -U BA6MygjngR8p7Xfz -v -O -a latest.dump
+The [scripts](./scripts) folder has some useful bash scripts to prepare data or artifacts fot these deployments.
+The [local](./local) folder has local certificates for running api over https locally.
