@@ -12,11 +12,11 @@ jobs:
       working-directory: ./aws
     steps:
       - name: Checkout
-      uses: action/checkout@v3
+        uses: action/checkout@v3
       - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrests.TF_API_TOKEN }}
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrests.TF_API_TOKEN }}
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
