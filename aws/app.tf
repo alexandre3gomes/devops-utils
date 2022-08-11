@@ -1,6 +1,10 @@
 resource "aws_s3_bucket" "app" {
   bucket_prefix = "finances-app"
 
+  versioning {
+    enabled = true
+  }
+
   provisioner "local-exec" {
     command = "aws s3 sync ../../finances-easy-web/dist s3://${self.bucket}"
   }

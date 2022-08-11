@@ -1,3 +1,14 @@
+variable "okta_client_id" {
+  type        = string
+  description = "Client id of Okta application oauth authentication"
+}
+
+variable "okta_client_secret" {
+  type        = string
+  description = "Client secret of Okta application oauth authentication"
+  sensitive   = true
+}
+
 resource "aws_s3_bucket" "artificats" {
   bucket_prefix = "artificats"
 
@@ -5,7 +16,6 @@ resource "aws_s3_bucket" "artificats" {
     command = "aws s3 cp ../../finances-easy-api/build/libs/finances-easy-api.jar s3://${self.bucket}"
   }
 }
-
 resource "aws_s3_bucket_public_access_block" "artifacts-public-policy" {
   bucket                  = aws_s3_bucket.artificats.id
   block_public_acls       = true
@@ -14,9 +24,38 @@ resource "aws_s3_bucket_public_access_block" "artifacts-public-policy" {
   restrict_public_buckets = true
 }
 
+data "aws_iam_policy_document" "policy_service_allow" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    condition {
+      test     = "StringEquals"
+      variable = "sts:ExternalId"
+      values   = ["elasticbeanstalk"]
+    }
+
+    principals {
+      identifiers = ["elasticbeanstalk.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_iam_role" "application-service-role" {
+  name                = "aws-elasticbeanstalk-service-role"
+  assume_role_policy  = data.aws_iam_policy_document.policy_service_allow.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth", "arn:aws:iam::aws:policy/AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy"]
+}
+
 resource "aws_elastic_beanstalk_application" "api" {
   name        = "finances-easy-api"
   description = "An API to provide backend for Finances Easy Application"
+
+  appversion_lifecycle {
+    service_role          = aws_iam_role.application-service-role.arn
+    max_count             = 3
+    delete_source_from_s3 = true
+  }
 }
 
 resource "aws_elastic_beanstalk_application_version" "api-source" {
@@ -81,13 +120,13 @@ resource "aws_elastic_beanstalk_environment" "api-env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "OKTA_CLIENT_ID"
-    value     = "0oa1gbqkbkTvwRSZS5d6"
+    value     = var.okta_client_id
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "OKTA_CLIENT_SECRET"
-    value     = "iO2LQt5QWSz920Zz2ojfdZrOl1YydNJkX2HIAkmC"
+    value     = var.okta_client_secret
   }
 
   setting {

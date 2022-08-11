@@ -20,11 +20,12 @@ resource "aws_security_group" "db-sg" {
   vpc_id = aws_default_vpc.primary.id
 
   ingress {
-    cidr_blocks = [aws_default_vpc.primary.cidr_block]
-    description = "POSTGRES"
-    from_port   = 5432
-    protocol    = "TCP"
-    to_port     = 5432
+    cidr_blocks     = [aws_default_vpc.primary.cidr_block]
+    description     = "POSTGRES"
+    from_port       = 5432
+    protocol        = "TCP"
+    to_port         = 5432
+    security_groups = [aws_security_group.api-sg.id]
   }
 }
 

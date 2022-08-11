@@ -8,6 +8,8 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./aws
     steps:
       - name: Checkout
       uses: action/checkout@v3
