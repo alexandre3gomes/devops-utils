@@ -13,6 +13,17 @@ terraform {
   }
   required_version = ">= 1.2.0"
 }
+
+variable "AWS_ACCESS_KEY_ID" {
+  type        = string
+  description = "AWS access key used by terraform"
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  type        = string
+  description = "AWS secret access key used by terraform"
+}
+
 provider "aws" {
   region = "eu-west-1"
 }
