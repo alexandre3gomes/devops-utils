@@ -9,11 +9,16 @@ variable "okta_client_secret" {
   sensitive   = true
 }
 
+variable "api_jar_name" {
+  type        = string
+  description = "Name of the api jar"
+}
+
 resource "aws_s3_bucket" "artificats" {
   bucket_prefix = "artificats"
 
   provisioner "local-exec" {
-    command = "aws s3 cp ../../finances-easy-api/build/libs/finances-easy-api.jar s3://${self.bucket}"
+    command = "aws s3 cp ../../finances-easy-api/build/libs/${var.api_jar_name} s3://${self.bucket}"
   }
 }
 resource "aws_s3_bucket_public_access_block" "artifacts-public-policy" {
