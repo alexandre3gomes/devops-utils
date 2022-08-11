@@ -32,9 +32,6 @@ jobs:
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
-        env:
-          TF_VAR_okta_client_id: ${{ secrets.TF_VAR_okta_client_id }}
-          TF_VAR_okta_client_secret: ${{ secrets.TF_VAR_okta_client_secret }}
       - name: Update Pull Request
         uses: actions/github-script@v6.1.0
         if: github.event_name == 'pull_request'
@@ -70,3 +67,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+        env:
+          TF_VAR_okta_client_id: ${{ secrets.OKTA_CLIENT_ID }}
+          TF_VAR_okta_client_secret: ${{ secrets.OKTA_CLIENT_SECRET }}
