@@ -1,14 +1,16 @@
 resource "aws_s3_bucket" "app" {
   bucket_prefix = "finances-app"
-
-  versioning {
-    enabled = true
-  }
-
   provisioner "local-exec" {
     command = "aws s3 sync ../../finances-easy-web/dist s3://${self.bucket}"
   }
 
+}
+
+resource "aws_s3_bucket_versioning" "app-versioning" {
+  bucket = aws_s3_bucket.app.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "app-public-policy" {
