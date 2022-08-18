@@ -1,2 +1,6 @@
 #!/bin/sh
-pg_restore -h ec2-176-34-184-174.eu-west-1.compute.amazonaws.com -p 5432 -U htflozsrgqktdg -W -d d40e3dk5r0g1ho -a -F tar -O -v finances.dump
+export HOST=
+export USER=
+export DB=
+psql -h $HOST -p 5432 -U $USER -W -d $DB -c 'TRUNCATE app_users, category, income, expense, budget, budget_periods, budget_categories, savings, databasechangelog, databasechangeloglock'
+pg_restore -h $HOST -p 5432 -U $USER -W -d $DB -a -O -v latest.dump

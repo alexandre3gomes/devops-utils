@@ -1,2 +1,5 @@
 #!/bin/sh
-pg_dump -h finances-db.capfvbhu8jfa.eu-west-1.rds.amazonaws.com -p 5432 -U postgres -W -d finances -a -F tar -O -v -f finances.dump
+export HOST=
+export USER=
+export DB=
+pg_dump -h $HOST -p 5432 -U $USER -W -d $DB -a -F tar -O -v -f finances.dump
