@@ -12,7 +12,7 @@ resource "aws_db_instance" "finances-rds" {
   allow_major_version_upgrade     = true
   apply_immediately               = true
   delete_automated_backups        = true
-  backup_retention_period         = 5
+  backup_retention_period         = 3
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
   publicly_accessible             = true
   vpc_security_group_ids          = [aws_security_group.db-sg.id]
